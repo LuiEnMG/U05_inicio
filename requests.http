@@ -20,3 +20,14 @@ Content-Type: application/json
 
 ### Eliminar alumno: 204
 DELETE {{baseUrl}}/alumnos/1
+
+
+
+### 1. Sin filtro (Debe conservar el contrato y retornar todos los alumnos)
+GET http://localhost:8080/api/alumnos
+
+### 2. Filtro ACTIVO
+GET http://localhost:8080/api/alumnos?estatus=ACTIVO
+
+### 3. Filtro BAJA
+GET http://localhost:8080/api/alumnos?estatus=BAJA

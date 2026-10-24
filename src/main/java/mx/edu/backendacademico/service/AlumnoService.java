@@ -3,11 +3,15 @@ package mx.edu.backendacademico.service;
 // Coordina los casos de uso y conserva las reglas fuera del transporte HTTP.
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 import mx.edu.backendacademico.domain.Alumno;
 import mx.edu.backendacademico.domain.EstatusAlumno;
 import mx.edu.backendacademico.exception.AlumnoNoEncontradoException;
 import mx.edu.backendacademico.exception.MatriculaDuplicadaException;
 import mx.edu.backendacademico.repository.AlumnoRepository;
+import mx.edu.backendacademico.dto.AlumnoResponse;
+import mx.edu.backendacademico.dto.AlumnoMapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +25,15 @@ public class AlumnoService {
     public List<Alumno> listar() {
         // Devuelve una instantánea de los alumnos desde el adaptador activo.
         return repository.buscarTodos();
+    }
+
+    public List<AlumnoResponse> listarAlumnos(EstatusAlumno estatus) {
+        List<Alumno> alumnos = AlumnoRepository.buscarTodos(); // Obtiene la lista base
+
+        return alumnos.stream()
+                .filter(alumno -> estatus == null || alumno.estatus() == estatus)
+                .map(AlumnoMapper::toResponse)
+                .collect(Collectors.toList());
     }
 
     public Alumno buscar(Long id) {

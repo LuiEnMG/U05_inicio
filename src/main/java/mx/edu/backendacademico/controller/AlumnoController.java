@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/v1/alumnos")
@@ -32,6 +33,13 @@ public class AlumnoController {
     // GET consulta sin solicitar cambios de estado de negocio.
     @GetMapping("/{id}")
     public AlumnoResponse buscar(@PathVariable Long id) { return AlumnoMapper.toResponse(service.buscar(id)); }
+
+    @GetMapping
+    public ResponseEntity<List<AlumnoResponse>> listarAlumnos(
+            @RequestParam(required = false) EstatusAlumno estatus) {
+        List<AlumnoResponse> alumnos = AlumnoService.listarAlumnos(estatus);
+        return ResponseEntity.ok(alumnos);
+    }
 
     // El servicio asigna identidad; ResponseEntity publica 201 y Location.
     @PostMapping
